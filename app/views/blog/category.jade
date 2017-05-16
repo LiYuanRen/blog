@@ -1,0 +1,54 @@
+extends layout.jade
+
+
+
+block ss
+    form.navbar-form.pull-right(method="get", action= action)
+        input.form-control(type="text", name="keyword", placeholder="搜索...") 
+
+block content
+    h2.page-header
+        = category.name
+        分类下有
+        = length
+        篇文章
+    each post in posts
+        div.post
+            h3.post-title
+                a(href="/posts/view/" + post.slug, target="_blank")
+                    =post.title
+            div.post-abstract
+                =truncate(post.content, 160)
+            div.post-meta
+                span.post-created 时间:&nbsp;
+                    =moment(post.created).format('YYYY-MM-DD')
+                span.post-author 作者:&nbsp;
+                    =post.author
+                span.post-category 分类:&nbsp;
+                    a(href="/posts/category/" + post.category.name, target="_blank")
+                        =post.category.name
+                span.post-comment 评论:&nbsp;
+                    =post.comments.length || 0
+                span.post-favorite 被赞:&nbsp;
+                    =post.meta.favorite || 0
+                span.post-link
+                    a(href="/posts/view/" + post.slug, target="_blank") 查看全文
+
+    if pageCount > 1
+        nav
+            ul.pagination
+                - var pages = pageNum - 1
+                - var pagex = pageNum + 1
+                li
+                    a(href="/posts/category/" + category.name + "?page=" + pages + "&keyword=" + filter.keyword) 上一页
+                - var currentPage = 1
+                while currentPage <= pageCount
+                    if (currentPage === pageNum)
+                        li.active
+                            a(href="/posts/category/" + category.name + "?page=" + currentPage + "&keyword=" + filter.keyword)= currentPage++
+                    else
+                        li
+                            a(href="/posts/category/" + category.name + "?page=" + currentPage + "&keyword=" + filter.keyword)= currentPage++
+                            //- a(href="/posts?page="  + post.category.name + currentPage)= currentPage++
+                li
+                    a(href="/posts/category/" + category.name + "?page=" + pagex + "&keyword=" + filter.keyword) 下一页

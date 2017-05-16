@@ -1,0 +1,9 @@
+extends layout.jade
+
+block content
+  div.container
+    h1= title
+    p Welcome to #{title}
+
+block scripts
+  script $(document).ready(function() {console.log('dpm ready'); })
